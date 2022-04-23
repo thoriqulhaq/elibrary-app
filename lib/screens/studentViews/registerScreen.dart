@@ -13,8 +13,8 @@ class _registerScreenState extends State<registerScreen> {
   final _formKey = GlobalKey<FormState>();
 
   // Input Controller
-  final _firstNameController = TextEditingController();
-  final _lastNameController = TextEditingController();
+  final _fullNameController = TextEditingController();
+  final _emailController = TextEditingController();
   final _idNumberController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
@@ -37,8 +37,8 @@ class _registerScreenState extends State<registerScreen> {
               ),
             ),
             TextInput(
-              label: 'First Name',
-              controller: _firstNameController,
+              label: 'Fullname',
+              controller: _fullNameController,
               keyboardType: TextInputType.text,
               validator: (String? value) {
                 if (value == null || value.trim().isEmpty) {
@@ -48,9 +48,9 @@ class _registerScreenState extends State<registerScreen> {
               },
             ),
             TextInput(
-              label: 'Last Name',
-              controller: _lastNameController,
-              keyboardType: TextInputType.text,
+              label: 'Email',
+              controller: _emailController,
+              keyboardType: TextInputType.emailAddress,
               validator: (String? value) {
                 if (value == null || value.trim().isEmpty) {
                   return 'This field is required';
