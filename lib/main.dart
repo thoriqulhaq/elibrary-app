@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:elibrary_app/screens/studentViews/registerScreen.dart';
+import 'package:elibrary_app/screens/studentViews/forgotPassword.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 void main() async {
@@ -28,7 +29,7 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.green,
       ),
-      home: registerScreen(),
+      home: forgotPassword(),
     );
   }
 }
