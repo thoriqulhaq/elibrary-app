@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:elibrary_app/screens/components/textInput.dart';
 import 'package:elibrary_app/screens/components/submitButton.dart';
-import 'package:elibrary_app/firebase/firebase_auth.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class forgotPassword extends StatefulWidget {
   forgotPassword({Key? key}) : super(key: key);
@@ -18,6 +18,12 @@ class _forgotPasswordState extends State<forgotPassword> {
   
 
   var isLoading = false;
+  @override
+  void dispose() {
+    _emailController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -88,9 +94,36 @@ class _forgotPasswordState extends State<forgotPassword> {
   }
 
   Future _passwordReset() async {
-    await = FirebaseAuth.instance;
-     _auth.sendPasswordResetEmail();
+    try{
+    await FirebaseAuth.instance
+     .sendPasswordResetEmail(email: _emailController.text.trim());
+
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('Password Reset Email Sent'),
+        actions: [
+          FlatButton(
+            child: Text('OK'),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+        ],
+      ),);
+  } on FirebaseAuthException catch(e) {
+    print(e);
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        content: Text(e.message!),
+        actions: [
+          FlatButton(
+            child: Text('OK'),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+        ],
+      ),);
   }
 
 }
 
+}
