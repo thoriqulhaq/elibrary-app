@@ -19,6 +19,8 @@ class _registerScreenState extends State<registerScreen> {
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
 
+  var isLoading = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -100,10 +102,29 @@ class _registerScreenState extends State<registerScreen> {
             const SizedBox(
               height: 15,
             ),
-            SubmitButton(formKey: _formKey),
+            if (isLoading) ...[
+              const SizedBox(
+                height: 10,
+              ),
+              Center(
+                child: CircularProgressIndicator(),
+              ),
+            ] else ...[
+              SubmitButton(
+                formKey: _formKey,
+                process: _registerUser,
+              )
+            ],
           ],
         ),
       ),
     );
   }
+  
+  Future _registerUser() async {
+    setState(() {
+      isLoading = true;
+    });
+  }
+
 }

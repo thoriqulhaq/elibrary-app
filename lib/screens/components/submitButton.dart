@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 
 class SubmitButton extends StatelessWidget {
   final GlobalKey<FormState> formKey;
+  final Future Function() process;
 
   const SubmitButton({
     required this.formKey,
+    required this.process
   });
 
   @override
@@ -14,7 +16,9 @@ class SubmitButton extends StatelessWidget {
       child: ElevatedButton(
         onPressed: () {
           if (formKey.currentState != null &&
-              formKey.currentState!.validate()) {}
+              formKey.currentState!.validate()) {
+            process();
+          }
         },
         style: ElevatedButton.styleFrom(
           shape: RoundedRectangleBorder(
