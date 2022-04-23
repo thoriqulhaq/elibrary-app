@@ -78,7 +78,7 @@ class _forgotPasswordState extends State<forgotPassword> {
             ] else ...[
               SubmitButton(
                 formKey: _formKey,
-                process: _registerUser,
+                process: _passwordReset,
               )
             ],
           ],
@@ -87,14 +87,14 @@ class _forgotPasswordState extends State<forgotPassword> {
     );
   }
   
-  Future _registerUser() async {
-    setState(() {
-      isLoading = true;
-    });
-  }
+  
 
   Future _passwordReset() async {
+    
     try{
+      setState(() {
+      isLoading = true;
+    });
     await FirebaseAuth.instance
      .sendPasswordResetEmail(email: _emailController.text.trim());
 
