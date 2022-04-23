@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:elibrary_app/screens/components/textInput.dart';
-import 'package:elibrary_app/screens/components/button.dart';
+import 'package:elibrary_app/screens/components/submitButton.dart';
 
 class registerScreen extends StatefulWidget {
   registerScreen({Key? key}) : super(key: key);
