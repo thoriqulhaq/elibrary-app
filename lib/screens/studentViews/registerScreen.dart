@@ -147,6 +147,7 @@ class _registerScreenState extends State<registerScreen> {
           actions: [
             FlatButton(
               child: Text('OK'),
+              //hard-code waiting login screen
               onPressed: () => Navigator.of(context).pop(),
             ),
           ],
