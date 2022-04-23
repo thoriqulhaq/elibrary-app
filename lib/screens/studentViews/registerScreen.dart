@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:elibrary_app/screens/components/textInput.dart';
 import 'package:elibrary_app/screens/components/submitButton.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class registerScreen extends StatefulWidget {
   registerScreen({Key? key}) : super(key: key);
@@ -120,11 +122,76 @@ class _registerScreenState extends State<registerScreen> {
       ),
     );
   }
-  
+
   Future _registerUser() async {
     setState(() {
       isLoading = true;
     });
+    try {
+      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: _emailController.text,
+        password: _passwordController.text,
+      );
+
+      await FirebaseFirestore.instance.collection('users').add({
+        'fullname': _fullNameController.text,
+        'email': _emailController.text,
+        'idNumber': _idNumberController.text,
+      });
+
+      await showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text('Success'),
+          content: Text('User has been registered'),
+          actions: [
+            FlatButton(
+              child: Text('OK'),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+          ],
+        ),
+      );
+    } on FirebaseAuthException catch (e) {
+      _handleSignUpError(e);
+      setState(() {
+        isLoading = false;
+      });
+    }
   }
 
+  void _handleSignUpError(FirebaseAuthException e) {
+    String messageToDisplay;
+    switch (e.code) {
+      case 'email-already-in-use':
+        messageToDisplay = 'Email is already in use';
+        break;
+      case 'invalid-email':
+        messageToDisplay = 'Email is invalid';
+        break;
+      case 'operation-not-allowed':
+        messageToDisplay = 'This operation is not allowed';
+        break;
+      case 'weak-password':
+        messageToDisplay = 'Password is too weak';
+        break;
+      default: // Default to general error message
+        messageToDisplay = 'An unknown error occured';
+        break;
+    }
+
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('Sign Up Failed'),
+        content: Text(messageToDisplay),
+        actions: [
+          FlatButton(
+            child: Text('OK'),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+        ],
+      ),
+    );
+  }
 }
