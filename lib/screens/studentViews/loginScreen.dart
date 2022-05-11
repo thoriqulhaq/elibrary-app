@@ -123,20 +123,11 @@ class _loginScreenState extends State<loginScreen> {
   void _handleSignUpError(FirebaseAuthException e) {
     String messageToDisplay;
     switch (e.code) {
-      case 'email-already-in-use':
-        messageToDisplay = 'Email is already in use';
-        break;
-      case 'invalid-email':
-        messageToDisplay = 'Email is invalid';
-        break;
-      case 'operation-not-allowed':
-        messageToDisplay = 'This operation is not allowed';
-        break;
-      case 'weak-password':
-        messageToDisplay = 'Password is too weak';
-        break;
+      
+    
+
       default: // Default to general error message
-        messageToDisplay = 'An unknown error occured';
+        messageToDisplay = 'Wrong Password or Email';
         break;
     }
 
