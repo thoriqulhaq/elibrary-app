@@ -1,8 +1,8 @@
 import 'package:elibrary_app/screens/studentViews/editProfile.dart';
 import 'package:flutter/material.dart';
-import 'package:elibrary_app/screens/studentViews/registerScreen.dart';
-import 'package:elibrary_app/screens/studentViews/loginScreen.dart';
 import 'package:elibrary_app/screens/studentViews/forgotPassword.dart';
+import 'package:elibrary_app/screens/universalViews/registerOptionScreen.dart';
+import 'package:elibrary_app/screens/studentViews/loginScreen.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:firebase_core/firebase_core.dart';
 
