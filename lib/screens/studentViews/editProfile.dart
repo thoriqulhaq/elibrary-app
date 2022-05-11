@@ -103,7 +103,7 @@ class _editProfileState extends State<editProfile> {
               height: 15,
             ),
             Text(user.email!),
-            Text(user.uid!),
+            Text(user.uid),
             if (isLoading) ...[
               const SizedBox(
                 height: 10,
