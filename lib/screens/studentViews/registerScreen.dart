@@ -137,8 +137,6 @@ class _registerScreenState extends State<registerScreen> {
         'fullname': _fullNameController.text,
         'email': _emailController.text,
         'idNumber': _idNumberController.text,
-        'userType': 'student',
-        'createdAt': DateTime.now(),
       });
 
       await showDialog(
