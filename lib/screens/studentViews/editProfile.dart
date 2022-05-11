@@ -94,16 +94,16 @@ class _editProfileState extends State<editProfile> {
               validator: (String? value) {
                 // Validate password match
                 if (_passwordController.text != value) {
-                  return "Password doesn't match";
                   passwordRefused = true;
+                  return "Password doesn't match";
+                } else {
+                  passwordRefused = false;
                 }
               },
             ),
             const SizedBox(
               height: 15,
             ),
-            Text(user.email!),
-            Text(user.uid),
             if (isLoading) ...[
               const SizedBox(
                 height: 10,
