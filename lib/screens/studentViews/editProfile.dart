@@ -22,10 +22,15 @@ class _editProfileState extends State<editProfile> {
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
 
+  // User authentication
+  final currentUser = FirebaseAuth.instance.currentUser;
+  var curUserId;
+
   var isLoading = false;
   var fullNameEmpty = false;
   var emailEmpty = false;
   var idNumberEmpty = false;
+  var passwordRefused = false;
 
   @override
   Widget build(BuildContext context) {
@@ -76,6 +81,35 @@ class _editProfileState extends State<editProfile> {
                 }
               },
             ),
+            TextInput(
+              label: 'Password',
+              controller: _passwordController,
+              keyboardType: TextInputType.text,
+              password: true,
+              validator: (String? value) {
+                if (value == null || value.trim().isEmpty) {
+                  return 'This field is required';
+                }
+                return null;
+              },
+            ),
+            TextInput(
+              label: 'Confirm Password',
+              controller: _confirmPasswordController,
+              keyboardType: TextInputType.text,
+              password: true,
+              validator: (String? value) {
+                if (value == null || value.trim().isEmpty) {
+                  return 'This field is required';
+                }
+
+                // Validate password match
+                if (_passwordController.text != value) {
+                  return "Password doesn't match";
+                  passwordRefused = true;
+                }
+              },
+            ),
             const SizedBox(
               height: 15,
             ),
@@ -101,25 +135,33 @@ class _editProfileState extends State<editProfile> {
   Future _updateUser() async {
     setState(() {
       isLoading = true;
+      if (FirebaseAuth.instance.currentUser != null) {
+        curUserId = FirebaseAuth.instance.currentUser?.uid;
+      }
     });
     try {
       if (fullNameEmpty == false) {
         await FirebaseFirestore.instance
             .collection('users')
-            .doc('Nr7U0lu3CChUlJenTpKH')
+            .doc('curUserId')
             .update({'fullname': _fullNameController.text});
       }
       if (emailEmpty == false) {
         await FirebaseFirestore.instance
             .collection('users')
-            .doc('Nr7U0lu3CChUlJenTpKH')
+            .doc('curUserId')
             .update({'email': _emailController.text});
       }
       if (idNumberEmpty == false) {
         await FirebaseFirestore.instance
             .collection('users')
-            .doc('Nr7U0lu3CChUlJenTpKH')
+            .doc('curUserId')
             .update({'idNumber': _idNumberController.text});
+      }
+      if (passwordRefused == false) {
+        try {
+          await currentUser!.updatePassword(_confirmPasswordController.text);
+        } catch (e) {}
       }
       await showDialog(
         context: context,
