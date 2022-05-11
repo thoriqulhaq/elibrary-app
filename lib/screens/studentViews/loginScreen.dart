@@ -3,8 +3,8 @@ import 'package:elibrary_app/screens/components/textInput.dart';
 import 'package:elibrary_app/screens/components/submitButton.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:elibrary_app/screens/studentViews/editProfile.dart'
-    as studentScreen;
+import 'package:elibrary_app/screens/studentViews/editProfile.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class loginScreen extends StatefulWidget {
   loginScreen({Key? key}) : super(key: key);
@@ -88,6 +88,7 @@ class _loginScreenState extends State<loginScreen> {
   }
 
   Future _registerUser() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
     setState(() {
       isLoading = true;
     });
@@ -96,6 +97,9 @@ class _loginScreenState extends State<loginScreen> {
         email: _emailController.text,
         password: _passwordController.text,
       );
+
+      pref.setString("name", _emailController.text);
+      pref.setBool("is_login", true);
 
       await showDialog(
         context: context,
@@ -106,7 +110,12 @@ class _loginScreenState extends State<loginScreen> {
             FlatButton(
               child: Text('OK'),
               //hard-code waiting login screen
-              onPressed: () => Navigator.of(context).pop(),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => editProfile()),
+                );
+              },
             ),
           ],
         ),
@@ -122,20 +131,8 @@ class _loginScreenState extends State<loginScreen> {
   void _handleSignUpError(FirebaseAuthException e) {
     String messageToDisplay;
     switch (e.code) {
-      case 'email-already-in-use':
-        messageToDisplay = 'Email is already in use';
-        break;
-      case 'invalid-email':
-        messageToDisplay = 'Email is invalid';
-        break;
-      case 'operation-not-allowed':
-        messageToDisplay = 'This operation is not allowed';
-        break;
-      case 'weak-password':
-        messageToDisplay = 'Password is too weak';
-        break;
       default: // Default to general error message
-        messageToDisplay = 'An unknown error occured';
+        messageToDisplay = 'Wrong Password or Email';
         break;
     }
 

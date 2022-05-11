@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:elibrary_app/screens/components/textInput.dart';
 import 'package:elibrary_app/screens/components/submitButton.dart';
+import 'package:elibrary_app/screens/studentViews/loginScreen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -137,8 +138,6 @@ class _registerScreenState extends State<registerScreen> {
         'fullname': _fullNameController.text,
         'email': _emailController.text,
         'idNumber': _idNumberController.text,
-        'userType': 'student',
-        'createdAt': DateTime.now(),
       });
 
       await showDialog(
@@ -191,7 +190,12 @@ class _registerScreenState extends State<registerScreen> {
         actions: [
           FlatButton(
             child: Text('OK'),
-            onPressed: () => Navigator.of(context).pop(),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => loginScreen()),
+              );
+            },
           ),
         ],
       ),
