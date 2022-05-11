@@ -139,6 +139,14 @@ class _editProfileState extends State<editProfile> {
             .collection('users')
             .doc(user.uid)
             .update({'email': _emailController.text});
+        try {
+          await user.updateEmail(_emailController.text);
+        } on FirebaseAuthException catch (e) {
+          setState(() {
+            _handleUpdateError(e);
+            isLoading = false;
+          });
+        }
       }
       if (idNumberEmpty == false) {
         await FirebaseFirestore.instance
@@ -149,7 +157,12 @@ class _editProfileState extends State<editProfile> {
       if (passwordRefused == false) {
         try {
           await user.updatePassword(_confirmPasswordController.text);
-        } catch (e) {}
+        } on FirebaseAuthException catch (e) {
+          _handleUpdateError(e);
+          setState(() {
+            isLoading = false;
+          });
+        }
       }
       await showDialog(
         context: context,
