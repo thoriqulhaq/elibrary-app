@@ -151,7 +151,12 @@ class _registerScreenState extends State<registerScreen> {
             FlatButton(
               child: Text('OK'),
               //hard-code waiting login screen
-              onPressed: () => Navigator.of(context).pop(),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => loginScreen()),
+                );
+              },
             ),
           ],
         ),
@@ -192,12 +197,7 @@ class _registerScreenState extends State<registerScreen> {
         actions: [
           FlatButton(
             child: Text('OK'),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => loginScreen()),
-              );
-            },
+            onPressed: () => Navigator.of(context).pop(),
           ),
         ],
       ),
