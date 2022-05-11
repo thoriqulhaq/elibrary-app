@@ -29,7 +29,7 @@ class _editProfileState extends State<editProfile> {
   var fullNameEmpty = false;
   var emailEmpty = false;
   var idNumberEmpty = false;
-  var passwordRefused = false;
+  var passwordRefused = true;
 
   @override
   Widget build(BuildContext context) {
@@ -94,10 +94,12 @@ class _editProfileState extends State<editProfile> {
               validator: (String? value) {
                 // Validate password match
                 if (_passwordController.text != value) {
-                  passwordRefused = true;
                   return "Password doesn't match";
-                } else {
-                  passwordRefused = false;
+                }
+                if (value != null || value!.trim().isNotEmpty) {
+                  if (_passwordController.text == value) {
+                    passwordRefused = false;
+                  }
                 }
               },
             ),
@@ -141,9 +143,8 @@ class _editProfileState extends State<editProfile> {
             .update({'email': _emailController.text});
         try {
           await user.updateEmail(_emailController.text);
-        } on FirebaseAuthException catch (e) {
+        } catch (e) {
           setState(() {
-            _handleUpdateError(e);
             isLoading = false;
           });
         }
@@ -157,11 +158,24 @@ class _editProfileState extends State<editProfile> {
       if (passwordRefused == false) {
         try {
           await user.updatePassword(_confirmPasswordController.text);
-        } on FirebaseAuthException catch (e) {
-          _handleUpdateError(e);
+        } catch (e) {
           setState(() {
             isLoading = false;
           });
+        }
+        if (passwordRefused == false && emailEmpty == false) {
+          await FirebaseFirestore.instance
+              .collection('users')
+              .doc(user.uid)
+              .update({'email': _emailController.text});
+          try {
+            await user.updateEmail(_emailController.text);
+            await user.updatePassword(_confirmPasswordController.text);
+          } catch (e) {
+            setState(() {
+              isLoading = false;
+            });
+          }
         }
       }
       await showDialog(
