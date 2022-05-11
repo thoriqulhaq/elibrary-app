@@ -44,7 +44,7 @@ class _forgotPasswordState extends State<forgotPassword> {
             Padding(
               padding: const EdgeInsets.only(left: 16.0, right: 16.0),
               child: 
-              Center(child: Text('Forgot Password', style: TextStyle
+              Center(child: Text('Reset Password', style: TextStyle
               (fontSize: 20.0, fontWeight: FontWeight.normal),
               ),
               ),

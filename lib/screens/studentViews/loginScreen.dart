@@ -1,7 +1,11 @@
+import 'package:elibrary_app/screens/studentViews/registerScreen.dart';
 import 'package:flutter/material.dart';
+import 'package:elibrary_app/screens/universalViews/registerOptionScreen.dart';
+import 'package:flutter/gestures.dart';
 import 'package:elibrary_app/screens/components/textInput.dart';
 import 'package:elibrary_app/screens/components/submitButton.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:elibrary_app/screens/studentViews/forgotPassword.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:elibrary_app/screens/studentViews/editProfile.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -65,7 +69,41 @@ class _loginScreenState extends State<loginScreen> {
                 return null;
               },
             ),
-            
+           Center( child:  RichText(
+      text: TextSpan(
+        text: 'Forgot Password?',
+        style: TextStyle( 
+          
+          color: Color.fromARGB(255, 0, 102, 255), fontSize: 20.0,
+          decoration: TextDecoration.underline,
+        ),
+        recognizer: TapGestureRecognizer()
+                ..onTap = () => Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => forgotPassword()),
+                )
+      ),
+      ),
+    ),
+            const SizedBox(
+              height: 15,
+            ),
+    Center( child:  RichText(
+      text: TextSpan(
+        text: 'Didn\'t have an account?',
+        style: TextStyle( 
+          
+          color: Color.fromARGB(255, 0, 102, 255), fontSize: 20.0,
+          decoration: TextDecoration.underline,
+        ),
+        recognizer: TapGestureRecognizer()
+                ..onTap = () => Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => registerOptionScreen()),
+                )
+      ),
+      ),
+    ),
             const SizedBox(
               height: 15,
             ),
