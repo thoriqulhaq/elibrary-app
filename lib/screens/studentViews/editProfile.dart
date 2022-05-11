@@ -23,8 +23,7 @@ class _editProfileState extends State<editProfile> {
   final _confirmPasswordController = TextEditingController();
 
   // User authentication
-  final currentUser = FirebaseAuth.instance.currentUser;
-  var curUserId;
+  final user = FirebaseAuth.instance.currentUser!;
 
   var isLoading = false;
   var fullNameEmpty = false;
@@ -86,12 +85,6 @@ class _editProfileState extends State<editProfile> {
               controller: _passwordController,
               keyboardType: TextInputType.text,
               password: true,
-              validator: (String? value) {
-                if (value == null || value.trim().isEmpty) {
-                  return 'This field is required';
-                }
-                return null;
-              },
             ),
             TextInput(
               label: 'Confirm Password',
@@ -99,10 +92,6 @@ class _editProfileState extends State<editProfile> {
               keyboardType: TextInputType.text,
               password: true,
               validator: (String? value) {
-                if (value == null || value.trim().isEmpty) {
-                  return 'This field is required';
-                }
-
                 // Validate password match
                 if (_passwordController.text != value) {
                   return "Password doesn't match";
@@ -113,6 +102,8 @@ class _editProfileState extends State<editProfile> {
             const SizedBox(
               height: 15,
             ),
+            Text(user.email!),
+            Text(user.uid!),
             if (isLoading) ...[
               const SizedBox(
                 height: 10,
@@ -135,32 +126,29 @@ class _editProfileState extends State<editProfile> {
   Future _updateUser() async {
     setState(() {
       isLoading = true;
-      if (FirebaseAuth.instance.currentUser != null) {
-        curUserId = FirebaseAuth.instance.currentUser?.uid;
-      }
     });
     try {
       if (fullNameEmpty == false) {
         await FirebaseFirestore.instance
             .collection('users')
-            .doc('curUserId')
+            .doc(user.uid)
             .update({'fullname': _fullNameController.text});
       }
       if (emailEmpty == false) {
         await FirebaseFirestore.instance
             .collection('users')
-            .doc('curUserId')
+            .doc(user.uid)
             .update({'email': _emailController.text});
       }
       if (idNumberEmpty == false) {
         await FirebaseFirestore.instance
             .collection('users')
-            .doc('curUserId')
+            .doc(user.uid)
             .update({'idNumber': _idNumberController.text});
       }
       if (passwordRefused == false) {
         try {
-          await currentUser!.updatePassword(_confirmPasswordController.text);
+          await user.updatePassword(_confirmPasswordController.text);
         } catch (e) {}
       }
       await showDialog(
