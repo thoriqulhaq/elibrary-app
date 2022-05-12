@@ -129,15 +129,21 @@ class _registerScreenState extends State<registerScreen> {
       isLoading = true;
     });
     try {
-      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+      final newUser =
+          await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: _emailController.text,
         password: _passwordController.text,
       );
 
-      await FirebaseFirestore.instance.collection('users').add({
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(newUser.user?.uid)
+          .set({
         'fullname': _fullNameController.text,
         'email': _emailController.text,
         'idNumber': _idNumberController.text,
+        'userType': 'student',
+        'createdAt': DateTime.now(),
       });
 
       await showDialog(
@@ -149,7 +155,12 @@ class _registerScreenState extends State<registerScreen> {
             FlatButton(
               child: Text('OK'),
               //hard-code waiting login screen
-              onPressed: () => Navigator.of(context).pop(),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => loginScreen()),
+                );
+              },
             ),
           ],
         ),
@@ -190,12 +201,7 @@ class _registerScreenState extends State<registerScreen> {
         actions: [
           FlatButton(
             child: Text('OK'),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => loginScreen()),
-              );
-            },
+            onPressed: () => Navigator.of(context).pop(),
           ),
         ],
       ),

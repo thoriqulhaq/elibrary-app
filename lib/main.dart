@@ -53,7 +53,7 @@ class _MyAppState extends State<MyApp> {
       }
     }
   }
-  
+
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -63,7 +63,7 @@ class _MyAppState extends State<MyApp> {
     } else {
       view = loginScreen();
     }
-    
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'e-Library',

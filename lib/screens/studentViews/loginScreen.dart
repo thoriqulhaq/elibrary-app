@@ -9,6 +9,7 @@ import 'package:elibrary_app/screens/studentViews/forgotPassword.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:elibrary_app/screens/studentViews/editProfile.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 class loginScreen extends StatefulWidget {
   loginScreen({Key? key}) : super(key: key);
 
@@ -45,7 +46,6 @@ class _loginScreenState extends State<loginScreen> {
                 ),
               ),
             ),
-            
             TextInput(
               label: 'Email',
               controller: _emailController,
@@ -136,7 +136,7 @@ class _loginScreenState extends State<loginScreen> {
         email: _emailController.text,
         password: _passwordController.text,
       );
-      
+
       pref.setString("name", _emailController.text);
       pref.setBool("is_login", true);
 
@@ -170,9 +170,6 @@ class _loginScreenState extends State<loginScreen> {
   void _handleSignUpError(FirebaseAuthException e) {
     String messageToDisplay;
     switch (e.code) {
-      
-    
-
       default: // Default to general error message
         messageToDisplay = 'Wrong Password or Email';
         break;
