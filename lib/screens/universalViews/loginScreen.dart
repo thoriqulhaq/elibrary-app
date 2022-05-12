@@ -5,9 +5,9 @@ import 'package:flutter/gestures.dart';
 import 'package:elibrary_app/screens/components/textInput.dart';
 import 'package:elibrary_app/screens/components/submitButton.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:elibrary_app/screens/studentViews/forgotPassword.dart';
+import 'package:elibrary_app/screens/universalViews/forgotPassword.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:elibrary_app/screens/studentViews/editProfile.dart';
+import 'package:elibrary_app/screens/universalViews/editProfile.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class loginScreen extends StatefulWidget {
