@@ -3,8 +3,9 @@ import 'package:elibrary_app/screens/components/textInput.dart';
 import 'package:elibrary_app/screens/components/submitButton.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:elibrary_app/screens/studentViews/editProfile.dart';
+import 'package:elibrary_app/screens/universalViews/editProfile.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 class loginScreen extends StatefulWidget {
   loginScreen({Key? key}) : super(key: key);
 
@@ -41,7 +42,6 @@ class _loginScreenState extends State<loginScreen> {
                 ),
               ),
             ),
-            
             TextInput(
               label: 'Email',
               controller: _emailController,
@@ -65,7 +65,6 @@ class _loginScreenState extends State<loginScreen> {
                 return null;
               },
             ),
-            
             const SizedBox(
               height: 15,
             ),
@@ -98,7 +97,7 @@ class _loginScreenState extends State<loginScreen> {
         email: _emailController.text,
         password: _passwordController.text,
       );
-      
+
       pref.setString("name", _emailController.text);
       pref.setBool("is_login", true);
 

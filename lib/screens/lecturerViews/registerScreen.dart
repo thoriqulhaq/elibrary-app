@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:elibrary_app/screens/components/textInput.dart';
 import 'package:elibrary_app/screens/components/submitButton.dart';
-import 'package:elibrary_app/screens/studentViews/loginScreen.dart';
+import 'package:elibrary_app/screens/universalViews/loginScreen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
