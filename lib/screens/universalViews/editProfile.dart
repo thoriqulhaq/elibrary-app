@@ -1,9 +1,11 @@
 import 'dart:developer';
+import 'package:elibrary_app/screens/universalViews/loginScreen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:elibrary_app/screens/components/textInput.dart';
 import 'package:elibrary_app/screens/components/submitButton.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class editProfile extends StatefulWidget {
   const editProfile({Key? key}) : super(key: key);
@@ -14,6 +16,18 @@ class editProfile extends StatefulWidget {
 
 class _editProfileState extends State<editProfile> {
   final _formKey = GlobalKey<FormState>();
+  
+  doLogout() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    // Clear the shared preferences (Logged in user's information)
+    await pref.clear();
+
+    // Redirected to login screen
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => loginScreen()),
+    );
+  }
 
   // Input Controller
   final _fullNameController = TextEditingController();
@@ -119,6 +133,29 @@ class _editProfileState extends State<editProfile> {
                 process: _updateUser,
               )
             ],
+            const SizedBox(
+              height: 15,
+            ),
+            Padding(
+              padding:
+                  const EdgeInsets.only(left: 16.0, right: 16.0, bottom: 16.0),
+              child: ElevatedButton(
+                onPressed: () {
+                  doLogout();
+                },
+                style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15.0),
+                  ),
+                  padding: const EdgeInsets.all(19),
+                  primary: Colors.green,
+                ),
+                child: Text(
+                  'Logout',
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+            )
           ],
         ),
       ),
