@@ -209,7 +209,10 @@ class _uploadScreenState extends State<uploadScreen> {
         ),
       ),
     ),
-            ],
+
+    SizedBox(height: 20),
+    task != null ? buildUploadStatus(task!) : Container(),
+             ],
           ],],
         ),
       ),
@@ -218,7 +221,7 @@ class _uploadScreenState extends State<uploadScreen> {
 
   Future _selectContent() async{
 
-    final result = await FilePicker.platform.pickFiles();
+    final result = await FilePicker.platform.pickFiles(allowedExtensions: ['pdf']);
 
     if (result == null) return;
 
@@ -235,7 +238,9 @@ class _uploadScreenState extends State<uploadScreen> {
     final destination = 'contents/$fileName';
 
     task = FirebaseApi.uploadContent(destination, file!);
-
+    setState(() {
+      
+    });
     if (task == null) return;
 
     final snapshot = await task!.whenComplete(() {});
@@ -265,14 +270,23 @@ class _uploadScreenState extends State<uploadScreen> {
     }
   }
 
-
-
-
-
-
-
-
-
+Widget buildUploadStatus(UploadTask task) => StreamBuilder<TaskSnapshot>(
+  stream: task.snapshotEvents,
+  builder: (context, snapshot){
+    if(snapshot.hasData){
+      final snap = snapshot.data! as TaskSnapshot;
+      final progress = snap.bytesTransferred / snap.totalBytes;
+      return Column(
+        children: [
+          LinearProgressIndicator(value: progress),
+          Text('${(progress * 100).toStringAsFixed(2)}%'),
+        ],
+      );
+    } else{
+      return Container();
+    }
+  }
+);
 }
 
 class FirebaseApi{
@@ -281,6 +295,16 @@ class FirebaseApi{
       final ref = FirebaseStorage.instance.ref(destination);
 
       return ref.putFile(file);
+    } on FirebaseException catch (e){
+      return null;
+    }
+  }
+
+  static UploadTask? uploadBytes(String destination, Uint8List data) {
+    try{
+      final ref = FirebaseStorage.instance.ref(destination);
+
+      return ref.putData(data);
     } on FirebaseException catch (e){
       return null;
     }
