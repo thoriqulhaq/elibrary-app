@@ -1,4 +1,5 @@
 import 'package:elibrary_app/screens/universalViews/editProfile.dart';
+import 'package:elibrary_app/screens/universalViews/uploadScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:elibrary_app/screens/universalViews/forgotPassword.dart';
 import 'package:elibrary_app/screens/universalViews/registerOptionScreen.dart';
@@ -62,7 +63,7 @@ class _MyAppState extends State<MyApp> {
     if (isAuth) {
       view = editProfile();
     } else {
-      view = searchContentScreen();
+      view = loginScreen();
     }
 
     return MaterialApp(
