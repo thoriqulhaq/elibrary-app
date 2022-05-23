@@ -7,6 +7,7 @@ import 'package:elibrary_app/screens/universalViews/loginScreen.dart';
 import 'package:elibrary_app/screens/universalViews/editProfile.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'screens/studentViews/searchContentScreen.dart';
 
 void main() async {
   await dotenv.load(fileName: ".env");
@@ -61,7 +62,7 @@ class _MyAppState extends State<MyApp> {
     if (isAuth) {
       view = editProfile();
     } else {
-      view = loginScreen();
+      view = searchContentScreen();
     }
 
     return MaterialApp(
