@@ -44,19 +44,10 @@ class _uploadScreenState extends State<uploadScreen> {
         key: _formKey,
         child: ListView(
           children: [
-            Center(
-              child: Padding(
-                padding: const EdgeInsets.only(
-                    left: 16.0, right: 16.0, bottom: 24.0),
-                child: Image(
-                  image: AssetImage('assets/images/logo_main.png'),
-                ),
-              ),
-            ),
             Padding(
               padding: const EdgeInsets.only(left: 16.0, right: 16.0),
               child: 
-              Center(child: Text('Reset Password', style: TextStyle
+              Center(child: Text('Upload Content', style: TextStyle
               (fontSize: 20.0, fontWeight: FontWeight.normal),
               ),
               ),
