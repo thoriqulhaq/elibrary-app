@@ -274,13 +274,14 @@ Widget buildUploadStatus(UploadTask task) => StreamBuilder<TaskSnapshot>(
   stream: task.snapshotEvents,
   builder: (context, snapshot){
     if(snapshot.hasData){
-      final snap = snapshot.data! as TaskSnapshot;
+      final snap = snapshot.data!;
       final progress = snap.bytesTransferred / snap.totalBytes;
-      
-      return Text(
-        '$progress %',
+      final percentage = (progress * 100).toStringAsFixed(2);
+
+      return Center( child: Text(
+        '$percentage %',
         style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, fontFamily: 'Raleway')
-      );
+      ));
     } else{
       return Container();
     }
