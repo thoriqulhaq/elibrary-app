@@ -221,7 +221,7 @@ class _uploadScreenState extends State<uploadScreen> {
 
   Future _selectContent() async{
 
-    final result = await FilePicker.platform.pickFiles(allowedExtensions: ['pdf']);
+    final result = await FilePicker.platform.pickFiles(type: FileType.custom, allowedExtensions: ['pdf']);
 
     if (result == null) return;
 
@@ -276,11 +276,10 @@ Widget buildUploadStatus(UploadTask task) => StreamBuilder<TaskSnapshot>(
     if(snapshot.hasData){
       final snap = snapshot.data! as TaskSnapshot;
       final progress = snap.bytesTransferred / snap.totalBytes;
-      return Column(
-        children: [
-          LinearProgressIndicator(value: progress),
-          Text('${(progress * 100).toStringAsFixed(2)}%'),
-        ],
+      
+      return Text(
+        '$progress %',
+        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, fontFamily: 'Raleway')
       );
     } else{
       return Container();
