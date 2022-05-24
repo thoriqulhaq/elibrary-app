@@ -86,13 +86,12 @@ class _homePageState extends State<homePage> {
               height: 20,
             ),
             Container(
-              height: 150,
+              height: 175,
               child: ListView(
                 scrollDirection: Axis.horizontal,
                 children: [
                   Container(
                     width: 120.0,
-                    color: Colors.red,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -101,14 +100,13 @@ class _homePageState extends State<homePage> {
                           height: 105,
                           width: 105,
                         ),
-                        SizedBox(height: 10),
+                        SizedBox(height: 20),
                         Text('Title')
                       ],
                     ),
                   ),
                   Container(
                     width: 120.0,
-                    color: Colors.blue,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -117,14 +115,13 @@ class _homePageState extends State<homePage> {
                           height: 105,
                           width: 105,
                         ),
-                        SizedBox(height: 10),
+                        SizedBox(height: 20),
                         Text('Title')
                       ],
                     ),
                   ),
                   Container(
                     width: 120.0,
-                    color: Colors.green,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -133,14 +130,13 @@ class _homePageState extends State<homePage> {
                           height: 105,
                           width: 105,
                         ),
-                        SizedBox(height: 10),
+                        SizedBox(height: 20),
                         Text('Title')
                       ],
                     ),
                   ),
                   Container(
                     width: 120.0,
-                    color: Colors.yellow,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -149,7 +145,7 @@ class _homePageState extends State<homePage> {
                           height: 105,
                           width: 105,
                         ),
-                        SizedBox(height: 10),
+                        SizedBox(height: 20),
                         Text('Title')
                       ],
                     ),
@@ -169,13 +165,12 @@ class _homePageState extends State<homePage> {
               height: 20,
             ),
             Container(
-              height: 150,
+              height: 175,
               child: ListView(
                 scrollDirection: Axis.horizontal,
                 children: [
                   Container(
                     width: 120.0,
-                    color: Colors.red,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -184,14 +179,13 @@ class _homePageState extends State<homePage> {
                           height: 105,
                           width: 105,
                         ),
-                        SizedBox(height: 10),
+                        SizedBox(height: 20),
                         Text('Title')
                       ],
                     ),
                   ),
                   Container(
                     width: 120.0,
-                    color: Colors.blue,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -200,14 +194,13 @@ class _homePageState extends State<homePage> {
                           height: 105,
                           width: 105,
                         ),
-                        SizedBox(height: 10),
+                        SizedBox(height: 20),
                         Text('Title')
                       ],
                     ),
                   ),
                   Container(
                     width: 120.0,
-                    color: Colors.green,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -216,14 +209,13 @@ class _homePageState extends State<homePage> {
                           height: 105,
                           width: 105,
                         ),
-                        SizedBox(height: 10),
+                        SizedBox(height: 20),
                         Text('Title')
                       ],
                     ),
                   ),
                   Container(
                     width: 120.0,
-                    color: Colors.yellow,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -232,7 +224,7 @@ class _homePageState extends State<homePage> {
                           height: 105,
                           width: 105,
                         ),
-                        SizedBox(height: 10),
+                        SizedBox(height: 20),
                         Text('Title')
                       ],
                     ),
