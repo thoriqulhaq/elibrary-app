@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class homePage extends StatefulWidget {
   const homePage({Key? key}) : super(key: key);
@@ -85,74 +86,61 @@ class _homePageState extends State<homePage> {
             SizedBox(
               height: 20,
             ),
-            Container(
-              height: 175,
-              child: ListView(
-                scrollDirection: Axis.horizontal,
-                children: [
-                  Container(
-                    width: 120.0,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Image(
-                          image: AssetImage('assets/images/logo_small.png'),
-                          height: 105,
-                          width: 105,
-                        ),
-                        SizedBox(height: 20),
-                        Text('Title')
-                      ],
-                    ),
-                  ),
-                  Container(
-                    width: 120.0,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Image(
-                          image: AssetImage('assets/images/logo_small.png'),
-                          height: 105,
-                          width: 105,
-                        ),
-                        SizedBox(height: 20),
-                        Text('Title')
-                      ],
-                    ),
-                  ),
-                  Container(
-                    width: 120.0,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Image(
-                          image: AssetImage('assets/images/logo_small.png'),
-                          height: 105,
-                          width: 105,
-                        ),
-                        SizedBox(height: 20),
-                        Text('Title')
-                      ],
-                    ),
-                  ),
-                  Container(
-                    width: 120.0,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Image(
-                          image: AssetImage('assets/images/logo_small.png'),
-                          height: 105,
-                          width: 105,
-                        ),
-                        SizedBox(height: 20),
-                        Text('Title')
-                      ],
-                    ),
-                  )
-                ],
-              ),
-            ),
+            StreamBuilder(
+                stream: FirebaseFirestore.instance
+                    .collection('contents')
+                    .snapshots(),
+                builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                  if (snapshot.hasData) {
+                    return Container(
+                      height: 175,
+                      child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: snapshot.data?.docs.length,
+                          itemBuilder: ((context, index) => Container(
+                              width: 120.0,
+                              child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Image.network(
+                                      snapshot.data?.docs[index]['url'],
+                                      height: 105,
+                                      width: 105,
+                                    ),
+                                    SizedBox(height: 20),
+                                    Text(
+                                      snapshot.data?.docs[index]['title'],
+                                      overflow: TextOverflow.ellipsis,
+                                    )
+                                  ])))),
+                    );
+                  } else {
+                    return Container(
+                      height: 175,
+                      child: ListView(
+                        scrollDirection: Axis.horizontal,
+                        children: [
+                          Container(
+                            width: 120.0,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Image(
+                                  image: AssetImage(
+                                      'assets/images/logo_small.png'),
+                                  height: 105,
+                                  width: 105,
+                                ),
+                                SizedBox(height: 20),
+                                Text('title')
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
+                    );
+                  }
+                }),
             SizedBox(
               height: 20,
             ),
@@ -228,7 +216,7 @@ class _homePageState extends State<homePage> {
                         Text('Title')
                       ],
                     ),
-                  )
+                  ),
                 ],
               ),
             ),
