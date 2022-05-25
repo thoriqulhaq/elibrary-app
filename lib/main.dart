@@ -63,7 +63,7 @@ class _MyAppState extends State<MyApp> {
     if (isAuth) {
       view = editProfile();
     } else {
-      view = loginScreen();
+      view = uploadScreen();
     }
 
     return MaterialApp(
