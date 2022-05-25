@@ -65,7 +65,7 @@ class _MyAppState extends State<MyApp> {
     if (isAuth) {
       view = HomeWrapperScreen();
     } else {
-      view = loginScreen();
+      view = uploadScreen();
     }
 
     return MaterialApp(

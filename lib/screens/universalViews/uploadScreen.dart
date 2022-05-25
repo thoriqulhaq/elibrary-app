@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'dart:math';
 import 'dart:typed_data';
-
+import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:elibrary_app/screens/components/textInput.dart';
 import 'package:elibrary_app/screens/components/submitButton.dart';
@@ -26,7 +26,9 @@ class _uploadScreenState extends State<uploadScreen> {
 
   final _formKey = GlobalKey<FormState>();
   UploadTask? task;
+  UploadTask? task2;
   File? file;
+  File? coverFile;
   // Input Controller
   final _titleController = TextEditingController();
   final _authorController = TextEditingController();
@@ -38,9 +40,12 @@ class _uploadScreenState extends State<uploadScreen> {
   var isLoading = false;
   @override
   Widget build(BuildContext context) {
+    final fileName = file != null ? basename(file!.path) : 'No file selected';
+    final coverFileName = coverFile != null ? basename(coverFile!.path) : 'No file selected';
+
      return Scaffold(
       backgroundColor: Colors.white,
-      body: Form(
+      body: Form( 
         key: _formKey,
         child: ListView(
           children: [
@@ -99,17 +104,41 @@ class _uploadScreenState extends State<uploadScreen> {
                 return null;
               },
             ),
-           TextInput(
-              label: 'Date of Publication',
-              controller: _dopController,
-              keyboardType: TextInputType.text,
-              validator: (String? value) {
-                if (value == null || value.trim().isEmpty) {
-                  return 'This field is required';
-                }
-                return null;
-              },
-            ),
+            Container(   margin: const EdgeInsets.only(left: 16.0, right: 16.0, bottom: 24.0),
+                    decoration: BoxDecoration(
+                      border: Border.all(width: 0.8),borderRadius: BorderRadius.circular(15.0),
+                    ),
+                    
+              child: Padding(padding: const EdgeInsets.only(left: 16.0, right: 16.0, bottom: 0.0),
+             child: Center(child: TextField(
+              controller: _dopController, //editing controller of this TextField
+                decoration: InputDecoration(  
+                  border: InputBorder.none,
+                   icon: Icon(Icons.calendar_today), //icon of text field
+                   labelText: "Date of Publication" //label text of field
+                ),
+                readOnly: true,  //set it true, so that user will not able to edit text
+                onTap: () async {
+                  DateTime? pickedDate = await showDatePicker(
+                      context: context, initialDate: DateTime.now(),
+                      firstDate: DateTime(2000), //DateTime.now() - not to allow to choose before today.
+                      lastDate: DateTime(2101)
+                  );
+                  
+                  if(pickedDate != null ){
+                      print(pickedDate);  //pickedDate output format => 2021-03-10 00:00:00.000
+                      String formattedDate = DateFormat('yyyy-MM-dd').format(pickedDate); 
+                      print(formattedDate); //formatted date output using intl package =>  2021-03-16
+                        //you can implement different kind of Date Format here according to your requirement
+
+                      setState(() {
+                         _dopController.text = formattedDate; //set output date to TextField value. 
+                      });
+                  }else{
+                      print("Date is not selected");
+                  }
+                },
+            ),),),),
             TextInput(
               label: 'Place of Publication',
               controller: _popController,
@@ -150,6 +179,34 @@ class _uploadScreenState extends State<uploadScreen> {
         onPressed: () {
           if (_formKey.currentState != null &&
               _formKey.currentState!.validate()) {
+            _selectCover();
+          }
+        },
+        style: ElevatedButton.styleFrom(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15.0),
+          ),
+          padding: const EdgeInsets.all(19),
+          primary: Colors.green,
+        ),
+        
+        child: Text(
+          'Select Cover Image',
+          style: TextStyle(color: Colors.white),
+        ),
+      ),
+    
+    ),
+    Center(child: Padding(
+      padding: const EdgeInsets.only(left: 16.0, right: 16.0, bottom: 30.0),
+      child: Text(coverFileName, style: TextStyle(color: Color.fromARGB(255, 0, 0, 0))),),),
+
+              Padding(
+      padding: const EdgeInsets.only(left: 16.0, right: 16.0, bottom: 16.0),
+      child: ElevatedButton(
+        onPressed: () {
+          if (_formKey.currentState != null &&
+              _formKey.currentState!.validate()) {
             _selectContent();
           }
         },
@@ -165,7 +222,11 @@ class _uploadScreenState extends State<uploadScreen> {
           style: TextStyle(color: Colors.white),
         ),
       ),
+      
     ),
+    Center(child: Padding(
+      padding: const EdgeInsets.only(left: 16.0, right: 16.0, bottom: 24.0),
+      child: Text(fileName, style: TextStyle(color: Color.fromARGB(255, 0, 0, 0))),),),
 
     const SizedBox(
               height: 15,
@@ -179,7 +240,7 @@ class _uploadScreenState extends State<uploadScreen> {
               ),
             ] else ...[
               Padding(
-      padding: const EdgeInsets.only(left: 16.0, right: 16.0, bottom: 16.0),
+      padding: const EdgeInsets.only(left: 16.0, right: 16.0, bottom: 24.0),
       child: ElevatedButton(
         onPressed: () {
           if (_formKey.currentState != null &&
@@ -212,7 +273,7 @@ class _uploadScreenState extends State<uploadScreen> {
 
   Future _selectContent() async{
 
-    final result = await FilePicker.platform.pickFiles(type: FileType.custom, allowedExtensions: ['pdf']);
+    final result = await FilePicker.platform.pickFiles(type: FileType.custom, allowedExtensions: ['pdf'], allowMultiple: false);
 
     if (result == null) return;
 
@@ -222,20 +283,41 @@ class _uploadScreenState extends State<uploadScreen> {
     
   }
 
+  Future _selectCover() async{
+
+    final result = await FilePicker.platform.pickFiles(type: FileType.custom, allowedExtensions: ['jpeg', 'jpg', 'png', 'gif'], allowMultiple: false);
+
+    if (result == null) return;
+
+    final path = result.files.first.path!;
+
+    setState(() => coverFile = File(path));
+    
+  }
+
    Future _uploadContent() async {
     if (file == null) return;
+    if (coverFile == null) return;
 
     final fileName = basename(file!.path);
     final destination = 'contents/$fileName';
 
+     final coverFileName = basename(coverFile!.path);
+    final coverDestination = 'contents/$coverFileName';
+
     task = FirebaseApi.uploadContent(destination, file!);
+    task2 = FirebaseApi.uploadContent(coverDestination, coverFile!);
     setState(() {
       
     });
     if (task == null) return;
+    if (task2 == null) return;
 
     final snapshot = await task!.whenComplete(() {});
     final urlDownload = await snapshot.ref.getDownloadURL();
+
+    final snapshot2 = await task2!.whenComplete(() {});
+    final urlDownload2 = await snapshot2.ref.getDownloadURL();
     try {
       
       await FirebaseFirestore.instance
@@ -249,6 +331,8 @@ class _uploadScreenState extends State<uploadScreen> {
         'pop': _popController.text,
         'desc': _descController.text,
         'url': urlDownload,
+        'cover': urlDownload2,
+        'downloadNum': 0,
         'createdAt': DateTime.now(),
       });
 
@@ -301,3 +385,6 @@ class FirebaseApi{
     }
   }
 }
+
+
+
