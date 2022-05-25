@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:elibrary_app/screens/studentViews/searchContentScreen.dart';
 
 class homePage extends StatefulWidget {
   const homePage({Key? key}) : super(key: key);
@@ -229,7 +230,12 @@ class _homePageState extends State<homePage> {
         )),
       )),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => searchContentScreen()),
+          );
+        },
         child: const Icon(Icons.search),
         backgroundColor: Colors.green,
       ),
