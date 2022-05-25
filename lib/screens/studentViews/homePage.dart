@@ -16,13 +16,20 @@ class _homePageState extends State<homePage> {
       body: Container(
           child: Padding(
         padding: const EdgeInsets.only(
-            left: 16.0, right: 16.0, top: 48.0, bottom: 24),
+            left: 16.0, right: 16.0, top: 16, bottom: 24),
         child: (ListView(
           children: [
             Container(
               height: 150,
               decoration: new BoxDecoration(
-                  color: Colors.lightGreenAccent,
+                  gradient: LinearGradient(
+                    begin: Alignment.centerLeft,
+                    end: Alignment.centerRight,
+                    colors: [
+                      Colors.green,
+                      Colors.green.shade50,
+                    ],
+                  ),
                   borderRadius: BorderRadius.circular(15)),
               child: Padding(
                   padding: const EdgeInsets.only(left: 16.0, right: 16.0),
@@ -31,40 +38,35 @@ class _homePageState extends State<homePage> {
                     children: [
                       Column(
                         mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Row(
-                            children: [
-                              Text(
-                                "Welcome",
-                                style: TextStyle(
-                                    fontSize: 24, color: Colors.green[900]),
-                              ),
-                            ],
+                          Text(
+                            "W E L C O M E",
+                            style: TextStyle(
+                                fontSize: 24,
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold),
                           ),
                           SizedBox(
                             height: 5,
                           ),
-                          Row(
-                            children: [
-                              Text(
-                                "To",
+                          Text(
+                            "T O",
                                 style: TextStyle(
-                                    fontSize: 24, color: Colors.green[900]),
-                              )
-                            ],
+                                fontSize: 24,
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold),
                           ),
                           SizedBox(
                             height: 5,
                           ),
-                          Row(
-                            children: [
-                              Text(
-                                "E - Library",
+                          Text(
+                            "E - L I B R A R Y",
                                 style: TextStyle(
-                                    fontSize: 24, color: Colors.green[900]),
-                              )
-                            ],
-                          )
+                                fontSize: 24,
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold),
+                          ),
                         ],
                       ),
                       Image(
@@ -76,12 +78,16 @@ class _homePageState extends State<homePage> {
                   )),
             ),
             SizedBox(
-              height: 20,
+              height: 30,
             ),
             Text(
               "RECENTLY UPLOADED",
               style:
-                  TextStyle(fontSize: 20, color: Colors.grey, letterSpacing: 2),
+                  TextStyle(
+                  fontSize: 20,
+                  color: Colors.grey,
+                  letterSpacing: 2,
+                  fontWeight: FontWeight.bold),
             ),
             SizedBox(
               height: 20,
@@ -153,79 +159,70 @@ class _homePageState extends State<homePage> {
             Text(
               "MOST DOWNLOADED",
               style:
-                  TextStyle(fontSize: 20, color: Colors.grey, letterSpacing: 2),
+                  TextStyle(
+                  fontSize: 20,
+                  color: Colors.grey,
+                  letterSpacing: 2,
+                  fontWeight: FontWeight.bold),
             ),
             SizedBox(
               height: 20,
             ),
-            Container(
-              height: 175,
-              child: ListView(
-                scrollDirection: Axis.horizontal,
-                children: [
-                  Container(
-                    width: 120.0,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Image(
-                          image: AssetImage('assets/images/logo_small.png'),
-                          height: 105,
-                          width: 105,
-                        ),
-                        SizedBox(height: 20),
-                        Text('Title')
-                      ],
-                    ),
-                  ),
-                  Container(
-                    width: 120.0,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Image(
-                          image: AssetImage('assets/images/logo_small.png'),
-                          height: 105,
-                          width: 105,
-                        ),
-                        SizedBox(height: 20),
-                        Text('Title')
-                      ],
-                    ),
-                  ),
-                  Container(
-                    width: 120.0,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Image(
-                          image: AssetImage('assets/images/logo_small.png'),
-                          height: 105,
-                          width: 105,
-                        ),
-                        SizedBox(height: 20),
-                        Text('Title')
-                      ],
-                    ),
-                  ),
-                  Container(
-                    width: 120.0,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Image(
-                          image: AssetImage('assets/images/logo_small.png'),
-                          height: 105,
-                          width: 105,
-                        ),
-                        SizedBox(height: 20),
-                        Text('Title')
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
+            StreamBuilder(
+                stream: FirebaseFirestore.instance
+                    .collection('contents')
+                    .snapshots(),
+                builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                  if (snapshot.hasData) {
+                    return Container(
+                      height: 175,
+                      child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: snapshot.data?.docs.length,
+                          itemBuilder: ((context, index) => Container(
+                              width: 120.0,
+                              child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Image.network(
+                                      snapshot.data?.docs[index]['url'],
+                                      height: 105,
+                                      width: 105,
+                                    ),
+                                    SizedBox(height: 20),
+                                    Text(
+                                      snapshot.data?.docs[index]['title'],
+                                      overflow: TextOverflow.ellipsis,
+                                    )
+                                  ])))),
+                    );
+                  } else {
+                    return Container(
+                      height: 175,
+                      child: ListView(
+                        scrollDirection: Axis.horizontal,
+                        children: [
+                          Container(
+                            width: 120.0,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Image(
+                                  image: AssetImage(
+                                      'assets/images/logo_small.png'),
+                                  height: 105,
+                                  width: 105,
+                                ),
+                                SizedBox(height: 20),
+                                Text('title')
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
+                    );
+                  }
+                }),
           ],
         )),
       )),

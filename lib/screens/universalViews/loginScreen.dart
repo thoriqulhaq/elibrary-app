@@ -1,4 +1,5 @@
 import 'package:elibrary_app/screens/studentViews/registerScreen.dart';
+import 'package:elibrary_app/screens/studentViews/homeWrapperScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:elibrary_app/screens/universalViews/registerOptionScreen.dart';
 import 'package:flutter/gestures.dart';
@@ -152,7 +153,7 @@ class _loginScreenState extends State<loginScreen> {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => editProfile()),
+                  MaterialPageRoute(builder: (context) => HomeWrapperScreen()),
                 );
               },
             ),
