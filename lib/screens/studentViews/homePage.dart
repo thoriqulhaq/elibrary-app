@@ -89,14 +89,20 @@ class _homePageState extends State<homePage> {
             StreamBuilder(
                 stream: FirebaseFirestore.instance
                     .collection('contents')
+                    .orderBy('createdAt', descending: true)
                     .snapshots(),
                 builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
                   if (snapshot.hasData) {
+                    var itemNum = snapshot.data!.docs.length;
+                    if (snapshot.data!.docs.length >= 7) {
+                      itemNum = 7;
+                    }
+                    ;
                     return Container(
                       height: 175,
                       child: ListView.builder(
                           scrollDirection: Axis.horizontal,
-                          itemCount: snapshot.data?.docs.length,
+                          itemCount: itemNum,
                           itemBuilder: ((context, index) => Container(
                               width: 120.0,
                               child: Column(
