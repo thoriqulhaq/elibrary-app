@@ -40,6 +40,9 @@ dependencies:
   cloud_firestore: ^3.1.13
   shared_preferences: ^2.0.14
   firestore_search: ^0.1.9
+  file_picker: ^4.5.1
+  firebase_database: ^9.0.14
+  firebase_storage: ^10.2.16
 
 dev_dependencies:
   flutter_test:

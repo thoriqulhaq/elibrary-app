@@ -16,7 +16,7 @@ class editProfile extends StatefulWidget {
 
 class _editProfileState extends State<editProfile> {
   final _formKey = GlobalKey<FormState>();
-  
+
   doLogout() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     // Clear the shared preferences (Logged in user's information)
