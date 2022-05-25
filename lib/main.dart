@@ -62,7 +62,7 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     Widget view;
     if (isAuth) {
-      view = homePage();
+      view = editProfile();
     } else {
       view = loginScreen();
     }
