@@ -1,4 +1,5 @@
 import 'package:elibrary_app/screens/studentViews/homePage.dart';
+import 'package:elibrary_app/screens/studentViews/homeWrapperScreen.dart';
 import 'package:elibrary_app/screens/universalViews/editProfile.dart';
 import 'package:elibrary_app/screens/universalViews/uploadScreen.dart';
 import 'package:flutter/material.dart';
@@ -62,7 +63,7 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     Widget view;
     if (isAuth) {
-      view = editProfile();
+      view = HomeWrapperScreen();
     } else {
       view = loginScreen();
     }
