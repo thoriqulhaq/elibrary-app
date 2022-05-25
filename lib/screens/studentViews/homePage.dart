@@ -15,8 +15,8 @@ class _homePageState extends State<homePage> {
       backgroundColor: Colors.white,
       body: Container(
           child: Padding(
-        padding: const EdgeInsets.only(
-            left: 16.0, right: 16.0, top: 16, bottom: 24),
+        padding:
+            const EdgeInsets.only(left: 16.0, right: 16.0, top: 16, bottom: 24),
         child: (ListView(
           children: [
             Container(
@@ -52,7 +52,7 @@ class _homePageState extends State<homePage> {
                           ),
                           Text(
                             "T O",
-                                style: TextStyle(
+                            style: TextStyle(
                                 fontSize: 24,
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold),
@@ -62,7 +62,7 @@ class _homePageState extends State<homePage> {
                           ),
                           Text(
                             "E - L I B R A R Y",
-                                style: TextStyle(
+                            style: TextStyle(
                                 fontSize: 24,
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold),
@@ -82,8 +82,7 @@ class _homePageState extends State<homePage> {
             ),
             Text(
               "RECENTLY UPLOADED",
-              style:
-                  TextStyle(
+              style: TextStyle(
                   fontSize: 20,
                   color: Colors.grey,
                   letterSpacing: 2,
@@ -115,7 +114,7 @@ class _homePageState extends State<homePage> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Image.network(
-                                      snapshot.data?.docs[index]['url'],
+                                      snapshot.data?.docs[index]['cover'],
                                       height: 105,
                                       width: 105,
                                     ),
@@ -158,8 +157,7 @@ class _homePageState extends State<homePage> {
             ),
             Text(
               "MOST DOWNLOADED",
-              style:
-                  TextStyle(
+              style: TextStyle(
                   fontSize: 20,
                   color: Colors.grey,
                   letterSpacing: 2,
@@ -174,18 +172,22 @@ class _homePageState extends State<homePage> {
                     .snapshots(),
                 builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
                   if (snapshot.hasData) {
+                    var itemNum = snapshot.data!.docs.length;
+                    if (snapshot.data!.docs.length >= 7) {
+                      itemNum = 7;
+                    }
                     return Container(
                       height: 175,
                       child: ListView.builder(
                           scrollDirection: Axis.horizontal,
-                          itemCount: snapshot.data?.docs.length,
+                          itemCount: itemNum,
                           itemBuilder: ((context, index) => Container(
                               width: 120.0,
                               child: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Image.network(
-                                      snapshot.data?.docs[index]['url'],
+                                      snapshot.data?.docs[index]['cover'],
                                       height: 105,
                                       width: 105,
                                     ),
