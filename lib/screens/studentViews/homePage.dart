@@ -170,6 +170,7 @@ class _homePageState extends State<homePage> {
             StreamBuilder(
                 stream: FirebaseFirestore.instance
                     .collection('contents')
+                    .orderBy('downloadNum', descending: true)
                     .snapshots(),
                 builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
                   if (snapshot.hasData) {
