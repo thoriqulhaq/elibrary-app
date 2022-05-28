@@ -1,5 +1,8 @@
 import 'package:elibrary_app/screens/studentViews/homePage.dart';
-import 'package:elibrary_app/screens/studentViews/homeWrapperScreen.dart';
+import 'package:elibrary_app/screens/studentViews/homeWrapperScreen.dart'
+    as student;
+import 'package:elibrary_app/screens/lecturerViews/homeWrapperScreen.dart'
+    as lecturer;
 import 'package:elibrary_app/screens/universalViews/editProfile.dart';
 import 'package:elibrary_app/screens/universalViews/uploadScreen.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +14,7 @@ import 'package:elibrary_app/screens/universalViews/editProfile.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:elibrary_app/screens/studentViews/searchContentScreen.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 void main() async {
   await dotenv.load(fileName: ".env");
@@ -27,6 +31,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   bool isAuth = false;
+  bool isStudent = false;
 
   @override
   void initState() {
@@ -50,20 +55,34 @@ class _MyAppState extends State<MyApp> {
 
     var login_status = pref.getBool('is_login');
     if (login_status != false && login_status != null) {
-      if (mounted) {
-        setState(() {
-          isAuth = true;
-        });
-      }
+      var email = pref.getString('name');
+      FirebaseFirestore.instance
+          .collection('users')
+          .where('email', isEqualTo: email)
+          .get()
+          .then((value) => {
+                if (mounted)
+                  {
+                    setState(() {
+                      isAuth = true;
+                      value.docs[0]['userType'] == 'student'
+                          ? isStudent = true
+                          : isStudent = false;
+                    })
+                  }
+              });
     }
   }
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     Widget view;
     if (isAuth) {
-      view = HomeWrapperScreen();
+      if (isStudent) {
+        view = student.HomeWrapperScreen();
+      } else {
+        view = lecturer.HomeWrapperScreen();
+      }
     } else {
       view = loginScreen();
     }
@@ -72,15 +91,6 @@ class _MyAppState extends State<MyApp> {
       debugShowCheckedModeBanner: false,
       title: 'e-Library',
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
         primarySwatch: Colors.green,
       ),
       home: view,

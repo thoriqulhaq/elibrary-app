@@ -10,6 +10,10 @@ class HomeWrapperScreen extends StatefulWidget {
 class _HomeWrapperScreenState extends State<HomeWrapperScreen> {
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Scaffold(
+      body: Center(
+        child: Text('Maaf Lecture Belum Dibikin'),
+      ),
+    );
   }
 }
