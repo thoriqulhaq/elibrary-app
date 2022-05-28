@@ -32,25 +32,13 @@ class _searchContentScreenState extends State<searchContentScreen> {
               itemBuilder: (context, index) {
                 final DataModel data = dataList[index];
 
-                return Column(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        '${data.title}',
-                        style: Theme.of(context).textTheme.headline6,
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                          bottom: 8.0, left: 8.0, right: 8.0),
-                      child: Text('${data.author}',
-                          style: Theme.of(context).textTheme.bodyText1),
-                    )
-                  ],
+                return ListTile(
+                  leading: Image.network('${data.cover}'),
+                  title: Text('${data.title}'),
+                  subtitle: Text('${data.author}'),
+
+                   
+                    
                 );
               });
         }
@@ -73,8 +61,8 @@ class _searchContentScreenState extends State<searchContentScreen> {
 class DataModel {
   final String? title;
   final String? author;
-
-  DataModel({this.title, this.author});
+  final String? cover;
+  DataModel({this.title, this.author, this.cover});
 
   //Create a method to convert QuerySnapshot from Cloud Firestore to a list of objects of this DataModel
   //This function in essential to the working of FirestoreSearchScaffold
@@ -84,7 +72,7 @@ class DataModel {
       final Map<String, dynamic> dataMap =
           snapshot.data() as Map<String, dynamic>;
 
-      return DataModel(title: dataMap['title'], author: dataMap['author']);
+      return DataModel(title: dataMap['title'], author: dataMap['author'], cover: dataMap['cover']);
     }).toList();
   }
 }
