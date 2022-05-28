@@ -1,5 +1,8 @@
 import 'package:elibrary_app/screens/studentViews/registerScreen.dart';
-import 'package:elibrary_app/screens/studentViews/homeWrapperScreen.dart';
+import 'package:elibrary_app/screens/studentViews/homeWrapperScreen.dart'
+    as student;
+import 'package:elibrary_app/screens/lecturerViews/homeWrapperScreen.dart'
+    as lecturer;
 import 'package:flutter/material.dart';
 import 'package:elibrary_app/screens/universalViews/registerOptionScreen.dart';
 import 'package:flutter/gestures.dart';
@@ -140,6 +143,23 @@ class _loginScreenState extends State<loginScreen> {
 
       pref.setString("name", _emailController.text);
       pref.setBool("is_login", true);
+      
+      bool isStudent = false;
+
+      await FirebaseFirestore.instance
+          .collection('users')
+          .where('email', isEqualTo: _emailController.text)
+          .get()
+          .then((value) => {
+                if (mounted)
+                  {
+                    setState(() {
+                      value.docs[0]['userType'] == 'student'
+                          ? isStudent = true
+                          : isStudent = false;
+                    })
+                  }
+              });
 
       await showDialog(
         context: context,
@@ -153,7 +173,11 @@ class _loginScreenState extends State<loginScreen> {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => HomeWrapperScreen()),
+                  MaterialPageRoute(
+                    builder: (context) => isStudent
+                        ? student.HomeWrapperScreen()
+                        : lecturer.HomeWrapperScreen(),
+                  ),
                 );
               },
             ),
