@@ -15,6 +15,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:elibrary_app/screens/studentViews/searchContentScreen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:elibrary_app/screens/lecturerViews/contentList.dart';
 
 void main() async {
   await dotenv.load(fileName: ".env");
@@ -81,7 +82,7 @@ class _MyAppState extends State<MyApp> {
       if (isStudent) {
         view = student.HomeWrapperScreen();
       } else {
-        view = lecturer.HomeWrapperScreen();
+        view = contentList();
       }
     } else {
       view = loginScreen();

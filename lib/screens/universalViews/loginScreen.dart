@@ -13,6 +13,7 @@ import 'package:elibrary_app/screens/universalViews/forgotPassword.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:elibrary_app/screens/universalViews/editProfile.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:elibrary_app/screens/lecturerViews/contentList.dart';
 
 class loginScreen extends StatefulWidget {
   loginScreen({Key? key}) : super(key: key);
@@ -176,7 +177,7 @@ class _loginScreenState extends State<loginScreen> {
                   MaterialPageRoute(
                     builder: (context) => isStudent
                         ? student.HomeWrapperScreen()
-                        : lecturer.HomeWrapperScreen(),
+                        : contentList(),
                   ),
                 );
               },
