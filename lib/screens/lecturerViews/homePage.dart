@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:elibrary_app/screens/studentViews/searchContentScreen.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 class homePage extends StatefulWidget {
   const homePage({Key? key}) : super(key: key);
@@ -10,6 +10,7 @@ class homePage extends StatefulWidget {
 }
 
 class _homePageState extends State<homePage> {
+  final db = FirebaseFirestore.instance;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -79,167 +80,124 @@ class _homePageState extends State<homePage> {
                   )),
             ),
             SizedBox(
+              height: 70,
+            ),
+            Center(
+              child: Text(
+                "INFORMATION",
+                style: TextStyle(
+                    fontSize: 20,
+                    color: Colors.grey,
+                    letterSpacing: 2,
+                    fontWeight: FontWeight.bold),
+              ),
+            ),
+            SizedBox(
               height: 30,
             ),
-            Text(
-              "RECENTLY UPLOADED",
-              style: TextStyle(
-                  fontSize: 20,
-                  color: Colors.grey,
-                  letterSpacing: 2,
-                  fontWeight: FontWeight.bold),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            StreamBuilder(
-                stream: FirebaseFirestore.instance
-                    .collection('contents')
-                    .orderBy('createdAt', descending: true)
-                    .snapshots(),
-                builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-                  if (snapshot.hasData) {
-                    var itemNum = snapshot.data!.docs.length;
-                    if (snapshot.data!.docs.length >= 7) {
-                      itemNum = 7;
-                    }
-                    ;
-                    return Container(
-                      height: 175,
-                      child: ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: itemNum,
-                          itemBuilder: ((context, index) => Container(
-                              width: 120.0,
-                              child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Image.network(
-                                      snapshot.data?.docs[index]['cover'],
-                                      height: 105,
-                                      width: 105,
-                                    ),
-                                    SizedBox(height: 20),
-                                    Text(
-                                      snapshot.data?.docs[index]['title'],
-                                      overflow: TextOverflow.ellipsis,
-                                    )
-                                  ])))),
-                    );
-                  } else {
-                    return Container(
-                      height: 175,
-                      child: ListView(
-                        scrollDirection: Axis.horizontal,
+            Container(
+              height: 150,
+              decoration: new BoxDecoration(
+                  color: Colors.green.shade400,
+                  borderRadius: BorderRadius.circular(15)),
+              child: Padding(
+                  padding: const EdgeInsets.only(left: 16.0, right: 16.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Container(
-                            width: 120.0,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Image(
-                                  image: AssetImage(
-                                      'assets/images/logo_small.png'),
-                                  height: 105,
-                                  width: 105,
-                                ),
-                                SizedBox(height: 20),
-                                Text('title')
-                              ],
-                            ),
-                          )
+                          Icon(
+                            Icons.person,
+                            color: Colors.white,
+                            size: 48,
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          StreamBuilder<QuerySnapshot>(
+                            stream: db.collection('users').snapshots(),
+                            builder: (context, snapshot) {
+                              if (!snapshot.hasData) {
+                                return Center(
+                                  child: CircularProgressIndicator(),
+                                );
+                              } else {
+                                return Text(
+                                  snapshot.data!.docs.length.toString(),
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.normal),
+                                );
+                              }
+                            },
+                          ),
+                          SizedBox(
+                            height: 2,
+                          ),
+                          Text(
+                            "User",
+                            style: TextStyle(
+                                fontSize: 20,
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold),
+                          ),
                         ],
                       ),
-                    );
-                  }
-                }),
-            SizedBox(
-              height: 20,
-            ),
-            Text(
-              "MOST DOWNLOADED",
-              style: TextStyle(
-                  fontSize: 20,
-                  color: Colors.grey,
-                  letterSpacing: 2,
-                  fontWeight: FontWeight.bold),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            StreamBuilder(
-                stream: FirebaseFirestore.instance
-                    .collection('contents')
-                    .orderBy('downloadNum', descending: true)
-                    .snapshots(),
-                builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-                  if (snapshot.hasData) {
-                    var itemNum = snapshot.data!.docs.length;
-                    if (snapshot.data!.docs.length >= 7) {
-                      itemNum = 7;
-                    }
-                    return Container(
-                      height: 175,
-                      child: ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: itemNum,
-                          itemBuilder: ((context, index) => Container(
-                              width: 120.0,
-                              child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Image.network(
-                                      snapshot.data?.docs[index]['cover'],
-                                      height: 105,
-                                      width: 105,
-                                    ),
-                                    SizedBox(height: 20),
-                                    Text(
-                                      snapshot.data?.docs[index]['title'],
-                                      overflow: TextOverflow.ellipsis,
-                                    )
-                                  ])))),
-                    );
-                  } else {
-                    return Container(
-                      height: 175,
-                      child: ListView(
-                        scrollDirection: Axis.horizontal,
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Container(
-                            width: 120.0,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Image(
-                                  image: AssetImage(
-                                      'assets/images/logo_small.png'),
-                                  height: 105,
-                                  width: 105,
-                                ),
-                                SizedBox(height: 20),
-                                Text('title')
-                              ],
-                            ),
-                          )
+                          SizedBox(
+                            height: 6,
+                          ),
+                          Icon(
+                            Icons.book,
+                            color: Colors.white,
+                            size: 36,
+                          ),
+                          SizedBox(
+                            height: 16,
+                          ),
+                          StreamBuilder<QuerySnapshot>(
+                            stream: db.collection('contents').snapshots(),
+                            builder: (context, snapshot) {
+                              if (!snapshot.hasData) {
+                                return Center(
+                                  child: CircularProgressIndicator(),
+                                );
+                              } else {
+                                return Text(
+                                  snapshot.data!.docs.length.toString(),
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.normal),
+                                );
+                              }
+                            },
+                          ),
+                          SizedBox(
+                            height: 2,
+                          ),
+                          Text(
+                            "Content",
+                            style: TextStyle(
+                                fontSize: 20,
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold),
+                          ),
                         ],
                       ),
-                    );
-                  }
-                }),
+                    ],
+                  )),
+            ),
           ],
         )),
       )),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => searchContentScreen()),
-          );
-        },
-        child: const Icon(Icons.search),
-        backgroundColor: Colors.green,
-      ),
     );
   }
 }
