@@ -177,7 +177,7 @@ class _loginScreenState extends State<loginScreen> {
                   MaterialPageRoute(
                     builder: (context) => isStudent
                         ? student.HomeWrapperScreen()
-                        : contentList(),
+                        : lecturer.HomeWrapperScreen(),
                   ),
                 );
               },
