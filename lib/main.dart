@@ -82,7 +82,7 @@ class _MyAppState extends State<MyApp> {
       if (isStudent) {
         view = student.HomeWrapperScreen();
       } else {
-        view = contentList();
+        view = lecturer.HomeWrapperScreen();
       }
     } else {
       view = loginScreen();

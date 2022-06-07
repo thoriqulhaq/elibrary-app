@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:elibrary_app/screens/lecturerViews/editContent.dart';
+import 'package:elibrary_app/screens/lecturerViews/searchContentScreen.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 
@@ -16,7 +17,7 @@ class _contentListState extends State<contentList> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Uploaded Content"),
+        title: Text("Content Manager"),
         centerTitle: true,
       ),
       body: StreamBuilder<QuerySnapshot>(
@@ -28,12 +29,14 @@ class _contentListState extends State<contentList> {
             );
           } else {
             
-            return ListView(
+            return Container(
+              child: ListView(
               
               children: snapshot.data!.docs.map((doc) {
                 return ListTile(
-                  
-                  shape: RoundedRectangleBorder(side: BorderSide(color: Colors.black, width: 0.5), ),
+                    shape: RoundedRectangleBorder(
+                      side: BorderSide(color: Colors.white, width: 0.5),
+                    ),
                   //show the cover image
                   leading: Image.network(doc['cover']),
                   title: Text(doc['title']),
@@ -64,9 +67,20 @@ class _contentListState extends State<contentList> {
                   ),
                 );
               }).toList(),
+              ),
             );
           }
         },
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => searchContentScreen()),
+          );
+        },
+        child: const Icon(Icons.search),
+        backgroundColor: Colors.green,
       ),
     );
   }
