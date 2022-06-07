@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:elibrary_app/screens/lecturerViews/editContent.dart';
 import 'package:elibrary_app/screens/lecturerViews/searchContentScreen.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -40,18 +41,29 @@ class _contentListState extends State<contentList> {
                   leading: Image.network(doc['cover']),
                   title: Text(doc['title']),
                   subtitle: Text(doc['author']),
-                  trailing: IconButton(
-                    icon: Icon(Icons.delete),
-                    color: Colors.pink,
-                    onPressed: () {
-                      db.collection('contents').doc(doc.id).delete();
-                      db.collection('contents').doc(doc.id).collection('files').get().then((value) {
-                        for (var file in value.docs) {
+                 //edit button to edit the content and delete button to delete the content
+                  trailing: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      IconButton(
+                        icon: Icon(Icons.edit),
+                        onPressed: () {
+                          Navigator.push( context, MaterialPageRoute(builder: (context) => editContent(docId : doc.id)),);
+                        },
+                      ),
+                      IconButton(
+                        icon: Icon(Icons.delete),
+                        onPressed: () {
+                          db.collection('contents').doc(doc.id).delete();
+                          db.collection('contents').doc(doc.id).collection('files').get().then((value) {
+                          for (var file in value.docs) {
                           db.collection('contents').doc(doc.id).collection('files').doc(file.id).delete();
                           FirebaseStorage.instance.ref().child(file.data()['path']).delete();
                         }
-                      });
-                    },
+                        });
+                        },
+                      ),
+                    ],
                   ),
                 );
               }).toList(),
