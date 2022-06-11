@@ -1,3 +1,4 @@
+import 'package:elibrary_app/screens/studentViews/book_detail.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:elibrary_app/screens/studentViews/searchContentScreen.dart';
@@ -109,22 +110,38 @@ class _homePageState extends State<homePage> {
                       child: ListView.builder(
                           scrollDirection: Axis.horizontal,
                           itemCount: itemNum,
-                          itemBuilder: ((context, index) => Container(
-                              width: 120.0,
-                              child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Image.network(
-                                      snapshot.data?.docs[index]['cover'],
-                                      height: 105,
-                                      width: 105,
-                                    ),
-                                    SizedBox(height: 20),
-                                    Text(
-                                      snapshot.data?.docs[index]['title'],
-                                      overflow: TextOverflow.ellipsis,
-                                    )
-                                  ])))),
+                          itemBuilder: ((context, index) => GestureDetector(
+                                onTap: () {
+                                  Navigator.of(context)
+                                      .push(MaterialPageRoute(builder: (_) {
+                                    return BookDetail(
+                                      titleBook: snapshot.data!.docs[index]
+                                          ['title'],
+                                      descBook: snapshot.data!.docs[index]
+                                          ['desc'],
+                                      coverUrl: snapshot.data!.docs[index]
+                                          ['cover'],
+                                    );
+                                  }));
+                                },
+                                child: Container(
+                                    width: 120.0,
+                                    child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Image.network(
+                                            snapshot.data?.docs[index]['cover'],
+                                            height: 105,
+                                            width: 105,
+                                          ),
+                                          SizedBox(height: 20),
+                                          Text(
+                                            snapshot.data?.docs[index]['title'],
+                                            overflow: TextOverflow.ellipsis,
+                                          )
+                                        ])),
+                              ))),
                     );
                   } else {
                     return Container(
@@ -183,22 +200,38 @@ class _homePageState extends State<homePage> {
                       child: ListView.builder(
                           scrollDirection: Axis.horizontal,
                           itemCount: itemNum,
-                          itemBuilder: ((context, index) => Container(
-                              width: 120.0,
-                              child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Image.network(
-                                      snapshot.data?.docs[index]['cover'],
-                                      height: 105,
-                                      width: 105,
-                                    ),
-                                    SizedBox(height: 20),
-                                    Text(
-                                      snapshot.data?.docs[index]['title'],
-                                      overflow: TextOverflow.ellipsis,
-                                    )
-                                  ])))),
+                          itemBuilder: ((context, index) => GestureDetector(
+                                onTap: () {
+                                  Navigator.of(context)
+                                      .push(MaterialPageRoute(builder: (_) {
+                                    return BookDetail(
+                                      titleBook: snapshot.data!.docs[index]
+                                          ['title'],
+                                      descBook: snapshot.data!.docs[index]
+                                          ['desc'],
+                                      coverUrl: snapshot.data!.docs[index]
+                                          ['cover'],
+                                    );
+                                  }));
+                                },
+                                child: Container(
+                                    width: 120.0,
+                                    child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Image.network(
+                                            snapshot.data?.docs[index]['cover'],
+                                            height: 105,
+                                            width: 105,
+                                          ),
+                                          SizedBox(height: 20),
+                                          Text(
+                                            snapshot.data?.docs[index]['title'],
+                                            overflow: TextOverflow.ellipsis,
+                                          )
+                                        ])),
+                              ))),
                     );
                   } else {
                     return Container(
