@@ -15,6 +15,9 @@ final user = FirebaseAuth.instance.currentUser!;
 class _bookmarkPageState extends State<bookmarkPage> {
   @override
   Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
+    final double itemHeight = (size.height) / 1.5;
+    final double itemWidth = size.width / 2;
     return Scaffold(
       backgroundColor: Colors.white,
       body: Padding(
@@ -50,6 +53,9 @@ class _bookmarkPageState extends State<bookmarkPage> {
                           itemCount: snapshot.data!.docs.length,
                           gridDelegate:
                               SliverGridDelegateWithMaxCrossAxisExtent(
+                                  crossAxisSpacing: 10,
+                                  mainAxisSpacing: 10,
+                                  childAspectRatio: (itemWidth / itemHeight),
                                   maxCrossAxisExtent: 150),
                           itemBuilder: ((context, index) => Container(
                               color: Colors.white,
