@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:elibrary_app/screens/studentViews/homePage.dart';
 import 'package:elibrary_app/screens/studentViews/menuPage.dart';
+import 'package:elibrary_app/screens/studentViews/bookmarkPage.dart';
 
 class HomeWrapperScreen extends StatefulWidget {
   HomeWrapperScreen({Key? key}) : super(key: key);
@@ -20,9 +21,7 @@ class _HomeWrapperScreenState extends State<HomeWrapperScreen> {
 
   List<Widget> _widgetOptions = <Widget>[
     homePage(),
-    Text(
-      'Bookmark (On Progress ... )',
-    ),
+    bookmarkPage(),
     menuPage(),
   ];
 
