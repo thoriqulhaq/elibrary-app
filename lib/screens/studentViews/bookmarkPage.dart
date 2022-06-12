@@ -52,18 +52,62 @@ class _bookmarkPageState extends State<bookmarkPage> {
                               SliverGridDelegateWithMaxCrossAxisExtent(
                                   maxCrossAxisExtent: 150),
                           itemBuilder: ((context, index) => Container(
-                              color: Colors.amber,
+                              color: Colors.white,
                               child: StreamBuilder(
                                 stream: FirebaseFirestore.instance
                                     .collection("contents")
+                                    .doc(snapshot.data!.docs[index]["bid"])
                                     .snapshots(),
-                                builder: (context,
-                                    AsyncSnapshot<QuerySnapshot> snapshot2) {
+                                builder: (context, AsyncSnapshot snapshot2) {
                                   if (!snapshot2.hasData) {
                                     return Center(
                                       child: CircularProgressIndicator(),
                                     );
                                   } else {
+                                    return GestureDetector(
+                                      onTap: () {
+                                        Navigator.of(context).push(
+                                            MaterialPageRoute(builder: (_) {
+                                          return BookDetail(
+                                            titleBook: snapshot2.data['title'],
+                                            descBook: snapshot2.data['desc'],
+                                            coverUrl: snapshot2.data['cover'],
+                                            bookId:
+                                                snapshot.data!.docs[index].id,
+                                          );
+                                        }));
+                                      },
+                                      child: Container(
+                                          child: Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                            Container(
+                                              child: Image.network(
+                                                snapshot2.data['cover'],
+                                              ),
+                                            ),
+                                            SizedBox(height: 20),
+                                            Text(
+                                              snapshot2.data['title'],
+                                              overflow: TextOverflow.ellipsis,
+                                            )
+                                          ])),
+                                    );
+                                  }
+                                },
+                              )))),
+                    );
+                  }
+                })
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/* 
                                     return ListView.builder(
                                         itemBuilder: (context, index2) =>
                                             GestureDetector(
@@ -71,23 +115,14 @@ class _bookmarkPageState extends State<bookmarkPage> {
                                                 Navigator.of(context).push(
                                                     MaterialPageRoute(
                                                         builder: (_) {
-                                                  if (snapshot2.data!
-                                                          .docs[index2].id ==
-                                                      snapshot.data!.docs[index]
-                                                          ["bid"]) {
-                                                    return BookDetail(
-                                                      titleBook: snapshot2.data!
-                                                              .docs[index2]
-                                                          ['title'],
-                                                      descBook: snapshot2.data!
-                                                          .docs[index2]['desc'],
-                                                      coverUrl: snapshot2.data!
-                                                              .docs[index2]
-                                                          ['cover'],
-                                                    );
-                                                  } else {
-                                                    return Text("");
-                                                  }
+                                                  return BookDetail(
+                                                    titleBook: snapshot2
+                                                        .data['title'],
+                                                    descBook: snapshot2.data!
+                                                        .docs[index2]['desc'],
+                                                    coverUrl: snapshot2.data!
+                                                        .docs[index2]['cover'],
+                                                  );
                                                 }));
                                               },
                                               child: Container(
@@ -113,19 +148,7 @@ class _bookmarkPageState extends State<bookmarkPage> {
                                                               .ellipsis,
                                                         )
                                                       ])),
-                                            ));
-                                  }
-                                },
-                              )))),
-                    );
-                  }
-                })
-          ],
-        ),
-      ),
-    );
-  }
-}
+                                            ));*/
 
 /*StreamBuilder(
                 stream: FirebaseFirestore.instance

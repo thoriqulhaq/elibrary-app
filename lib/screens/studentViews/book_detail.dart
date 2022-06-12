@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -7,17 +9,27 @@ class BookDetail extends StatefulWidget {
       {Key? key,
       required this.titleBook,
       required this.descBook,
+      required this.bookId,
       required this.coverUrl})
       : super(key: key);
   final String titleBook;
   final String descBook;
   final String coverUrl;
+  final String bookId;
 
   @override
   State<BookDetail> createState() => _BookDetailState();
 }
 
+final user = FirebaseAuth.instance.currentUser!;
+
 class _BookDetailState extends State<BookDetail> {
+  bool isBookmark = false;
+
+  void initState() {
+    checkBookmark();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,10 +48,21 @@ class _BookDetailState extends State<BookDetail> {
                     widget.titleBook,
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
-                  Image.asset(
-                    'assets/images/bm-plus.png',
-                    width: 35,
-                  ),
+                  if (isBookmark == false) ...[
+                    IconButton(
+                      icon: Icon(Icons.bookmark_outline),
+                      onPressed: () {
+                        addBookmark();
+                      },
+                    ),
+                  ] else ...[
+                    IconButton(
+                      icon: Icon(Icons.bookmark),
+                      onPressed: () {
+                        removeBookmark();
+                      },
+                    ),
+                  ],
                 ],
               ),
             ),
@@ -109,5 +132,48 @@ class _BookDetailState extends State<BookDetail> {
         ],
       ),
     );
+  }
+
+  Future addBookmark() async {
+    try {
+      await FirebaseFirestore.instance
+          .collection("users")
+          .doc(user.uid)
+          .collection("bookmarks")
+          .doc(widget.bookId)
+          .set({'bid': widget.bookId});
+      checkBookmark();
+    } catch (e) {}
+  }
+
+  Future removeBookmark() async {
+    try {
+      await FirebaseFirestore.instance
+          .collection("users")
+          .doc(user.uid)
+          .collection("bookmarks")
+          .doc(widget.bookId)
+          .delete();
+      checkBookmark();
+    } catch (e) {}
+  }
+
+  checkBookmark() async {
+    var bookCheck = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(user.uid)
+        .collection("bookmarks")
+        .doc(widget.bookId)
+        .get();
+
+    if (bookCheck.exists) {
+      setState(() {
+        isBookmark = true;
+      });
+    } else {
+      setState(() {
+        isBookmark = false;
+      });
+    }
   }
 }

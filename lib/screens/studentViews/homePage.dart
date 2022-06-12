@@ -121,6 +121,7 @@ class _homePageState extends State<homePage> {
                                           ['desc'],
                                       coverUrl: snapshot.data!.docs[index]
                                           ['cover'],
+                                      bookId: snapshot.data!.docs[index].id,
                                     );
                                   }));
                                 },
@@ -211,6 +212,7 @@ class _homePageState extends State<homePage> {
                                           ['desc'],
                                       coverUrl: snapshot.data!.docs[index]
                                           ['cover'],
+                                      bookId: snapshot.data!.docs[index].id,
                                     );
                                   }));
                                 },
