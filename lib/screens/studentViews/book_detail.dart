@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:flutter_web_browser/flutter_web_browser.dart';
 
 class BookDetail extends StatefulWidget {
   BookDetail(
@@ -10,12 +11,14 @@ class BookDetail extends StatefulWidget {
       required this.titleBook,
       required this.descBook,
       required this.bookId,
-      required this.coverUrl})
+      required this.coverUrl,
+      required this.downloadUrl})
       : super(key: key);
   final String titleBook;
   final String descBook;
   final String coverUrl;
   final String bookId;
+  final String downloadUrl;
 
   @override
   State<BookDetail> createState() => _BookDetailState();
@@ -108,22 +111,19 @@ class _BookDetailState extends State<BookDetail> {
                   ),
                   SizedBox(height: 20),
                   Align(
-                    alignment: Alignment.centerRight,
-                    child: Container(
-                      width: 100,
-                      height: 40,
-                      decoration: BoxDecoration(
-                        color: Colors.greenAccent,
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                      child: Center(
-                        child: Text(
-                          "Download",
-                          //style: TextStyle(color: Colors.white),
-                        ),
-                      ),
-                    ),
-                  ),
+                      alignment: Alignment.centerRight,
+                      child: ElevatedButton(
+                          style: ButtonStyle(
+                            backgroundColor: MaterialStateProperty.all<Color>(
+                                Colors.greenAccent),
+                          ),
+                          onPressed: () {
+                            openDownloadLink();
+                          },
+                          child: Text(
+                            "D O W N L O A D",
+                            style: TextStyle(color: Colors.black),
+                          ))),
                 ],
               ),
             ),
@@ -175,5 +175,9 @@ class _BookDetailState extends State<BookDetail> {
         isBookmark = false;
       });
     }
+  }
+
+  Future openDownloadLink() async {
+    FlutterWebBrowser.openWebPage(url: widget.downloadUrl);
   }
 }
