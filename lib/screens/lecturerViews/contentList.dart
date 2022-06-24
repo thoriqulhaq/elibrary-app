@@ -47,8 +47,10 @@ class _contentListState extends State<contentList> {
                         IconButton(
                             onPressed: () async {
                               final ShareUrl = doc['url'];
+                              final authorName = doc['author'];
+                              final bookName = doc['author'];
                               await Share.share(
-                                  'check out this amazing book! \n$ShareUrl');
+                                  'check out the book $bookName by $authorName! \n\n$ShareUrl');
                               ;
                             },
                             icon: Icon(Icons.share_sharp)),

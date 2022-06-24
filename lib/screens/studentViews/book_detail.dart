@@ -13,13 +13,15 @@ class BookDetail extends StatefulWidget {
       required this.descBook,
       required this.bookId,
       required this.coverUrl,
-      required this.downloadUrl})
+      required this.downloadUrl,
+      required this.author})
       : super(key: key);
   final String titleBook;
   final String descBook;
   final String coverUrl;
   final String bookId;
   final String downloadUrl;
+  final String author;
 
   @override
   State<BookDetail> createState() => _BookDetailState();
@@ -193,6 +195,9 @@ class _BookDetailState extends State<BookDetail> {
 
   Future shareLink() async {
     final ShareUrl = widget.downloadUrl;
-    await Share.share('check out this amazing book! \n$ShareUrl');
+    final authorName = widget.author;
+    final bookName = widget.titleBook;
+    await Share.share(
+        'check out the book $bookName by $authorName! \n\n$ShareUrl');
   }
 }
