@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_web_browser/flutter_web_browser.dart';
+import 'package:share_plus/share_plus.dart';
 
 class BookDetail extends StatefulWidget {
   BookDetail(
@@ -51,21 +52,30 @@ class _BookDetailState extends State<BookDetail> {
                     widget.titleBook,
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
-                  if (isBookmark == false) ...[
-                    IconButton(
-                      icon: Icon(Icons.bookmark_outline),
-                      onPressed: () {
-                        addBookmark();
-                      },
-                    ),
-                  ] else ...[
-                    IconButton(
-                      icon: Icon(Icons.bookmark),
-                      onPressed: () {
-                        removeBookmark();
-                      },
-                    ),
-                  ],
+                  Row(
+                    children: [
+                      if (isBookmark == false) ...[
+                        IconButton(
+                          icon: Icon(Icons.bookmark_outline),
+                          onPressed: () {
+                            addBookmark();
+                          },
+                        ),
+                      ] else ...[
+                        IconButton(
+                          icon: Icon(Icons.bookmark),
+                          onPressed: () {
+                            removeBookmark();
+                          },
+                        ),
+                      ],
+                      IconButton(
+                          onPressed: () {
+                            shareLink();
+                          },
+                          icon: Icon(Icons.share_sharp))
+                    ],
+                  ),
                 ],
               ),
             ),
@@ -179,5 +189,10 @@ class _BookDetailState extends State<BookDetail> {
 
   Future openDownloadLink() async {
     FlutterWebBrowser.openWebPage(url: widget.downloadUrl);
+  }
+
+  Future shareLink() async {
+    final ShareUrl = widget.downloadUrl;
+    await Share.share('check out this amazing book! \n$ShareUrl');
   }
 }
