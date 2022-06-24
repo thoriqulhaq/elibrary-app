@@ -48,7 +48,7 @@ class _contentListState extends State<contentList> {
                             onPressed: () async {
                               final ShareUrl = doc['url'];
                               final authorName = doc['author'];
-                              final bookName = doc['author'];
+                              final bookName = doc['title'];
                               await Share.share(
                                   'check out the book $bookName by $authorName! \n\n$ShareUrl');
                               ;
