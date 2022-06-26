@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:elibrary_app/screens/lecturerViews/editContent.dart';
 import 'package:elibrary_app/screens/lecturerViews/searchContentScreen.dart';
+import 'package:elibrary_app/screens/studentViews/book_detail.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:share_plus/share_plus.dart';
@@ -38,7 +39,24 @@ class _contentListState extends State<contentList> {
                     ),
                     //show the cover image
                     leading: Image.network(doc['cover']),
-                    title: Text(doc['title']),
+                    title: new GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => BookDetail(
+                              titleBook: doc['title'],
+                              descBook: doc['desc'],
+                              coverUrl: doc['cover'],
+                              downloadUrl: doc['url'],
+                              author: doc['author'],
+                              bookId: doc.id,
+                            ),
+                          ),
+                        );
+                      },
+                      child: new Text(doc['title']),
+                    ),
                     subtitle: Text(doc['author']),
                     //edit button to edit the content and delete button to delete the content
                     trailing: Row(
