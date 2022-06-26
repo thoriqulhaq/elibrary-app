@@ -3,6 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:flutter_web_browser/flutter_web_browser.dart';
+import 'package:share_plus/share_plus.dart';
 
 class BookDetail extends StatefulWidget {
   BookDetail(
@@ -10,12 +12,16 @@ class BookDetail extends StatefulWidget {
       required this.titleBook,
       required this.descBook,
       required this.bookId,
-      required this.coverUrl})
+      required this.coverUrl,
+      required this.downloadUrl,
+      required this.author})
       : super(key: key);
   final String titleBook;
   final String descBook;
   final String coverUrl;
   final String bookId;
+  final String downloadUrl;
+  final String author;
 
   @override
   State<BookDetail> createState() => _BookDetailState();
@@ -48,21 +54,30 @@ class _BookDetailState extends State<BookDetail> {
                     widget.titleBook,
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
-                  if (isBookmark == false) ...[
-                    IconButton(
-                      icon: Icon(Icons.bookmark_outline),
-                      onPressed: () {
-                        addBookmark();
-                      },
-                    ),
-                  ] else ...[
-                    IconButton(
-                      icon: Icon(Icons.bookmark),
-                      onPressed: () {
-                        removeBookmark();
-                      },
-                    ),
-                  ],
+                  Row(
+                    children: [
+                      if (isBookmark == false) ...[
+                        IconButton(
+                          icon: Icon(Icons.bookmark_outline),
+                          onPressed: () {
+                            addBookmark();
+                          },
+                        ),
+                      ] else ...[
+                        IconButton(
+                          icon: Icon(Icons.bookmark),
+                          onPressed: () {
+                            removeBookmark();
+                          },
+                        ),
+                      ],
+                      IconButton(
+                          onPressed: () {
+                            shareLink();
+                          },
+                          icon: Icon(Icons.share_sharp))
+                    ],
+                  ),
                 ],
               ),
             ),
@@ -108,22 +123,19 @@ class _BookDetailState extends State<BookDetail> {
                   ),
                   SizedBox(height: 20),
                   Align(
-                    alignment: Alignment.centerRight,
-                    child: Container(
-                      width: 100,
-                      height: 40,
-                      decoration: BoxDecoration(
-                        color: Colors.greenAccent,
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                      child: Center(
-                        child: Text(
-                          "Download",
-                          //style: TextStyle(color: Colors.white),
-                        ),
-                      ),
-                    ),
-                  ),
+                      alignment: Alignment.centerRight,
+                      child: ElevatedButton(
+                          style: ButtonStyle(
+                            backgroundColor: MaterialStateProperty.all<Color>(
+                                Colors.greenAccent),
+                          ),
+                          onPressed: () {
+                            openDownloadLink();
+                          },
+                          child: Text(
+                            "D O W N L O A D",
+                            style: TextStyle(color: Colors.black),
+                          ))),
                 ],
               ),
             ),
@@ -175,5 +187,17 @@ class _BookDetailState extends State<BookDetail> {
         isBookmark = false;
       });
     }
+  }
+
+  Future openDownloadLink() async {
+    FlutterWebBrowser.openWebPage(url: widget.downloadUrl);
+  }
+
+  Future shareLink() async {
+    final ShareUrl = widget.downloadUrl;
+    final authorName = widget.author;
+    final bookName = widget.titleBook;
+    await Share.share(
+        'check out the book $bookName by $authorName! \n\n$ShareUrl');
   }
 }

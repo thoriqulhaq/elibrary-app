@@ -78,6 +78,8 @@ class _bookmarkPageState extends State<bookmarkPage> {
                                             titleBook: snapshot2.data['title'],
                                             descBook: snapshot2.data['desc'],
                                             coverUrl: snapshot2.data['cover'],
+                                            downloadUrl: snapshot2.data['url'],
+                                            author: snapshot2.data['author'],
                                             bookId:
                                                 snapshot.data!.docs[index].id,
                                           );
