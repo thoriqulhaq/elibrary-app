@@ -1,4 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:elibrary_app/screens/lecturerViews/editContent.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:firestore_search/firestore_search.dart';
 
@@ -12,6 +14,7 @@ class searchContentScreen extends StatefulWidget {
 }
 
 class _searchContentScreenState extends State<searchContentScreen> {
+  final db = FirebaseFirestore.instance;
   @override
   Widget build(BuildContext context) {
     return FirestoreSearchScaffold(
@@ -36,9 +39,47 @@ class _searchContentScreenState extends State<searchContentScreen> {
                   leading: Image.network('${data.cover}'),
                   title: Text('${data.title}'),
                   subtitle: Text('${data.author}'),
-
-                   
-                    
+                  trailing: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      IconButton(
+                        icon: Icon(Icons.edit),
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    editContent(docId: data.id!)),
+                          );
+                        },
+                      ),
+                      IconButton(
+                        icon: Icon(Icons.delete),
+                        onPressed: () {
+                          db.collection('contents').doc(data.id).delete();
+                          db
+                              .collection('contents')
+                              .doc(data.id)
+                              .collection('files')
+                              .get()
+                              .then((value) {
+                            for (var file in value.docs) {
+                              db
+                                  .collection('contents')
+                                  .doc(data.id)
+                                  .collection('files')
+                                  .doc(file.id)
+                                  .delete();
+                              FirebaseStorage.instance
+                                  .ref()
+                                  .child(file.data()['path'])
+                                  .delete();
+                            }
+                          });
+                        },
+                      ),
+                    ],
+                  ),
                 );
               });
         }
@@ -62,7 +103,8 @@ class DataModel {
   final String? title;
   final String? author;
   final String? cover;
-  DataModel({this.title, this.author, this.cover});
+  final String? id;
+  DataModel({this.title, this.author, this.cover, this.id});
 
   //Create a method to convert QuerySnapshot from Cloud Firestore to a list of objects of this DataModel
   //This function in essential to the working of FirestoreSearchScaffold
@@ -72,7 +114,11 @@ class DataModel {
       final Map<String, dynamic> dataMap =
           snapshot.data() as Map<String, dynamic>;
 
-      return DataModel(title: dataMap['title'], author: dataMap['author'], cover: dataMap['cover']);
+      return DataModel(
+          title: dataMap['title'],
+          author: dataMap['author'],
+          cover: dataMap['cover'],
+          id: snapshot.id);
     }).toList();
   }
 }
